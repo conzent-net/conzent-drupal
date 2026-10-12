@@ -1,0 +1,7 @@
+name: 'Conzent CMP'
+type: module
+description: 'GDPR, CCPA & ePrivacy compliant cookie banner with IAB TCF v2.2 and Google CMP certification. Supports both Conzent Cloud and self-hosted OCI.'
+package: 'Conzent'
+core_version_requirement: '^10 || ^11'
+php: 8.1
+configure: conzent.settings

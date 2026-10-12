@@ -1,0 +1,21 @@
+{
+  "name": "conzent/conzent-drupal",
+  "description": "GDPR, CCPA & ePrivacy compliant cookie banner. IAB TCF v2.2 and Google CMP Certified.",
+  "type": "drupal-module",
+  "license": "GPL-3.0-or-later",
+  "homepage": "https://getconzent.com",
+  "support": {
+    "issues": "https://github.com/conzent-net/oci/issues",
+    "source": "https://github.com/conzent-net/oci"
+  },
+  "require": {
+    "drupal/core": "^10 || ^11"
+  },
+  "minimum-stability": "dev",
+  "extra": {
+    "drupal": {
+      "version": "1.0.1",
+      "datestamp": "1711100000"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+conzent.settings:
+  path: '/admin/config/system/conzent'
+  defaults:
+    _form: '\Drupal\conzent_drupal\Form\ConzentSettingsForm'
+    _title: 'Conzent CMP Settings'
+  requirements:
+    _permission: 'administer site configuration'

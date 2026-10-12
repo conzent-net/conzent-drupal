@@ -1,0 +1,77 @@
+<?php
+
+/**
+ * @file
+ * Conzent CMP — Cookie Banner & Consent Management for Drupal.
+ *
+ * Provides GDPR, CCPA & ePrivacy compliant cookie consent management.
+ * IAB TCF v2.2 and Google CMP Certified.
+ * Supports self-hosted (OCI) and Conzent Cloud.
+ */
+
+/**
+ * The module's release, written on the loader tag as data-plugin so
+ * Compliance → Diagnostics in the Conzent app can tell whether it is current.
+ */
+const CONZENT_DRUPAL_VERSION = '1.0.1';
+
+/**
+ * Implements hook_page_attachments().
+ *
+ * Injects the Conzent banner script into every page <head>.
+ */
+function conzent_drupal_page_attachments(array &$attachments): void {
+  $config = \Drupal::config('conzent_drupal.settings');
+
+  $website_key = $config->get('website_key') ?? '';
+  $server_url  = $config->get('server_url') ?? '';
+  $verified    = $config->get('verified') ?? '';
+
+  if (empty($website_key) || $verified !== 'yes') {
+    return;
+  }
+
+  if (empty($server_url) || !filter_var($server_url, FILTER_VALIDATE_URL)) {
+    $server_url = 'https://app.getconzent.com';
+  }
+  $server_url = rtrim($server_url, '/');
+
+  // Banner script (must be first in <head>).
+  $banner_src = $server_url . '/c/consent.js';
+
+  // A single tag — everything is handled inside consent.js.
+  //
+  // Deliberately not async: the loader is parser-blocking, so both the IAB TCF
+  // stub and the Google Consent Mode defaults it pushes itself are registered
+  // before any ad tag probes for __tcfapi and before any Google tag can
+  // initialise. A separate inline default stub is redundant, and would be worse
+  // than the loader's own push because the loader honours data-dl for a renamed
+  // GTM dataLayer while a hardcoded stub always writes to "dataLayer".
+  // Canonical snippet: docs/embed-snippet.md in the Conzent repository.
+  $attachments['#attached']['html_head'][] = [
+    [
+      '#type'       => 'html_tag',
+      '#tag'        => 'script',
+      '#attributes' => [
+        'src'         => $banner_src,
+        'data-key'    => $website_key,
+        'data-plugin' => 'drupal/' . CONZENT_DRUPAL_VERSION,
+      ],
+      // Strongly negative weight so it is printed at the top of <head>.
+      '#weight'     => -10000,
+    ],
+    'conzent_banner_script',
+  ];
+}
+
+/**
+ * Implements hook_help().
+ */
+function conzent_drupal_help(string $route_name, $route_match): string {
+  if ($route_name === 'help.page.conzent_drupal') {
+    return '<p>' . t('Conzent CMP provides GDPR, CCPA & ePrivacy compliant cookie consent management. Configure your Website Key at <a href=":url">Conzent CMP Settings</a>.', [
+      ':url' => \Drupal\Core\Url::fromRoute('conzent.settings')->toString(),
+    ]) . '</p>';
+  }
+  return '';
+}

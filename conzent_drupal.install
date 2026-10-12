@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the Conzent CMP module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function conzent_drupal_uninstall(): void {
+  \Drupal::configFactory()->getEditable('conzent_drupal.settings')->delete();
+}

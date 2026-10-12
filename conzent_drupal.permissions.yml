@@ -1,0 +1,4 @@
+administer conzent:
+  title: 'Administer Conzent CMP'
+  description: 'Configure Conzent CMP settings including website key and server URL.'
+  restrict access: true

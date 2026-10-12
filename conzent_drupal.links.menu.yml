@@ -1,0 +1,6 @@
+conzent.settings:
+  title: 'Conzent CMP'
+  description: 'Configure Conzent cookie banner and consent management settings.'
+  route_name: conzent.settings
+  parent: system.admin_config_system
+  weight: 50
